@@ -4,6 +4,7 @@ import DifficultyCard from '../components/DifficultyCard';
 import StatsSummary from '../components/StatsSummary';
 import LeaderboardWidget from '../components/LeaderboardWidget';
 import ThemeToggle from '../components/ThemeToggle';
+import RepoLink from '../components/RepoLink';
 import { LogoMark } from '../components/icons';
 import { DIFFICULTY_LABEL, formatTime } from '../format';
 import {
@@ -57,6 +58,7 @@ export default function DashboardView() {
           <button type="button" onClick={() => signOut?.()}>
             Sign out
           </button>
+          <RepoLink />
           <ThemeToggle />
         </div>
       </header>

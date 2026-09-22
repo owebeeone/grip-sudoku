@@ -6,6 +6,7 @@ import NumberPad from '../components/NumberPad';
 import Toolbar from '../components/Toolbar';
 import VictoryModal from '../components/VictoryModal';
 import ThemeToggle from '../components/ThemeToggle';
+import RepoLink from '../components/RepoLink';
 import { DIFFICULTY_LABEL, formatTime } from '../format';
 import {
   ELAPSED_SECONDS,
@@ -62,6 +63,7 @@ export default function GameView() {
           <button type="button" onClick={() => exitToDashboard?.()}>
             Exit
           </button>
+          <RepoLink />
           <ThemeToggle />
         </div>
       </header>

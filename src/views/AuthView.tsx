@@ -15,7 +15,8 @@ import {
   AUTH_MODE_TAP,
   AUTH_SUBMIT,
 } from '../grips';
-import { LogoMark } from '../components/icons';
+import { GitHubIcon, LogoMark } from '../components/icons';
+import { REPO_URL } from '../components/RepoLink';
 import { DIFFICULTY_LABEL } from '../format';
 
 export default function AuthView() {
@@ -90,6 +91,10 @@ export default function AuthView() {
         <p className="auth-hint">
           Demo account: <code>demo@gripsudoku.app</code> / any password.
         </p>
+        <a className="auth-repo-link" href={REPO_URL} target="_blank" rel="noreferrer">
+          <GitHubIcon />
+          View the source on GitHub
+        </a>
       </form>
     </div>
   );

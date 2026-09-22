@@ -1,6 +1,7 @@
 import { useGrip, useGripSetter, useGripState } from '@owebeeone/grip-react';
 import { DIFFICULTIES } from '../engine/sudoku';
 import ThemeToggle from '../components/ThemeToggle';
+import RepoLink from '../components/RepoLink';
 import { DIFFICULTY_LABEL, formatDate, formatTime } from '../format';
 import type { AsyncState, ProfileStats, RunLogEntry } from '../types';
 import { CURRENT_VIEW_TAP, DASHBOARD_STATS, PROFILE_ACTIVE_TAB, PROFILE_ACTIVE_TAB_TAP, PROFILE_RUN_LOGS } from '../grips';
@@ -23,6 +24,7 @@ export default function ProfileView() {
           <button type="button" onClick={() => setView('dashboard')}>
             Back to dashboard
           </button>
+          <RepoLink />
           <ThemeToggle />
         </div>
       </header>
