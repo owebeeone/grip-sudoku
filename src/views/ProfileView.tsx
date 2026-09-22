@@ -1,20 +1,9 @@
 import { useGrip, useGripSetter, useGripState } from '@owebeeone/grip-react';
-import { DIFFICULTIES, type Difficulty } from '../engine/sudoku';
+import { DIFFICULTIES } from '../engine/sudoku';
+import ThemeToggle from '../components/ThemeToggle';
+import { DIFFICULTY_LABEL, formatDate, formatTime } from '../format';
 import type { AsyncState, ProfileStats, RunLogEntry } from '../types';
 import { CURRENT_VIEW_TAP, DASHBOARD_STATS, PROFILE_ACTIVE_TAB, PROFILE_ACTIVE_TAB_TAP, PROFILE_RUN_LOGS } from '../grips';
-
-const LABEL: Record<Difficulty, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard', insane: 'Insane' };
-
-function formatTime(sec: number | null): string {
-  if (sec == null) return '—';
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-}
 
 export default function ProfileView() {
   const [activeTab, setActiveTab] = useGripState(PROFILE_ACTIVE_TAB, PROFILE_ACTIVE_TAB_TAP);
@@ -29,22 +18,25 @@ export default function ProfileView() {
   return (
     <div className="page">
       <header className="app-header">
-        <h1>Profile & Statistics</h1>
-        <button type="button" onClick={() => setView('dashboard')}>
-          Back to Dashboard
-        </button>
+        <h1>Profile and statistics</h1>
+        <div className="header-actions">
+          <button type="button" onClick={() => setView('dashboard')}>
+            Back to dashboard
+          </button>
+          <ThemeToggle />
+        </div>
       </header>
 
       <div className="profile-tabs">
         {DIFFICULTIES.map((d) => (
           <button key={d} type="button" className={tab === d ? 'active' : ''} onClick={() => setActiveTab(d)}>
-            {LABEL[d]}
+            {DIFFICULTY_LABEL[d]}
           </button>
         ))}
       </div>
 
       <section className="panel">
-        <h2>{LABEL[tab]} Summary</h2>
+        <h2>{DIFFICULTY_LABEL[tab]} summary</h2>
         {stats.status !== 'ready' || !tabStats ? (
           <p className="muted">Loading…</p>
         ) : (
@@ -70,11 +62,11 @@ export default function ProfileView() {
       </section>
 
       <section className="panel">
-        <h2>Run History</h2>
+        <h2>Run history</h2>
         {runLogs.status !== 'ready' ? (
           <p className="muted">Loading…</p>
         ) : tabLogs.length === 0 ? (
-          <p className="muted">No {LABEL[tab].toLowerCase()} runs yet.</p>
+          <p className="muted">No {DIFFICULTY_LABEL[tab].toLowerCase()} runs yet.</p>
         ) : (
           <table className="stats-table">
             <thead>

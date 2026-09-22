@@ -1,14 +1,6 @@
-import { DIFFICULTIES, type Difficulty } from '../engine/sudoku';
+import { DIFFICULTIES } from '../engine/sudoku';
+import { DIFFICULTY_LABEL, formatTime } from '../format';
 import type { AsyncState, ProfileStats } from '../types';
-
-const LABEL: Record<Difficulty, string> = { easy: 'Easy', medium: 'Medium', hard: 'Hard', insane: 'Insane' };
-
-function formatTime(sec: number | null): string {
-  if (sec == null) return '—';
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
 
 export default function StatsSummary(props: { stats: AsyncState<ProfileStats> }) {
   const { stats } = props;
@@ -16,7 +8,7 @@ export default function StatsSummary(props: { stats: AsyncState<ProfileStats> })
   if (stats.status === 'idle' || stats.status === 'loading') {
     return (
       <section className="panel">
-        <h2>Your Stats</h2>
+        <h2>Your stats</h2>
         <p className="muted">Loading…</p>
       </section>
     );
@@ -24,7 +16,7 @@ export default function StatsSummary(props: { stats: AsyncState<ProfileStats> })
   if (stats.status === 'error') {
     return (
       <section className="panel">
-        <h2>Your Stats</h2>
+        <h2>Your stats</h2>
         <p className="auth-error">{stats.error}</p>
       </section>
     );
@@ -38,7 +30,7 @@ export default function StatsSummary(props: { stats: AsyncState<ProfileStats> })
 
   return (
     <section className="panel">
-      <h2>Your Stats</h2>
+      <h2>Your stats</h2>
       <div className="stats-headline">
         <div>
           <span className="stats-number">{data.currentStreak}</span>
@@ -67,7 +59,7 @@ export default function StatsSummary(props: { stats: AsyncState<ProfileStats> })
             const s = data.byDifficulty[d];
             return (
               <tr key={d}>
-                <td>{LABEL[d]}</td>
+                <td>{DIFFICULTY_LABEL[d]}</td>
                 <td>{formatTime(s.bestTimeSec)}</td>
                 <td>{formatTime(s.avgTimeSec)}</td>
                 <td>

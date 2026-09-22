@@ -4,10 +4,12 @@ import { AuthTap } from './authTap';
 import { DashboardTap } from './dashboardTap';
 import { ProfileTap } from './profileTap';
 import { GameTap } from './gameTap';
+import { ThemeTap } from './themeTap';
 
 /** Wires every controller tap together and registers them with `grok`. Called once at bootstrap. */
 export function registerAllTaps(grok: Grok): void {
   const atoms = registerSimpleAtoms(grok);
+  grok.registerTap(new ThemeTap());
 
   const dashboardTap = new DashboardTap(atoms.authFormDifficulty.get());
   const profileTap = new ProfileTap();

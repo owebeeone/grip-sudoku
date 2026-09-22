@@ -42,6 +42,7 @@ import {
   GAME_TOGGLE_INPUT_MODE,
   GAME_UNDO,
   INPUT_MODE,
+  LAST_MISTAKE,
   MISTAKE_COUNT,
   SELECTED_CELL,
   SELECTED_DIGIT,
@@ -76,6 +77,7 @@ export class GameTap extends MultiAtomValueTap implements Tap {
     SELECTED_DIGIT,
     INPUT_MODE,
     MISTAKE_COUNT,
+    LAST_MISTAKE,
     ELAPSED_SECONDS,
     VICTORY_SUMMARY,
     GAME_START,
@@ -236,6 +238,7 @@ export class GameTap extends MultiAtomValueTap implements Tap {
     this.set(SELECTED_DIGIT, null);
     this.set(INPUT_MODE, 'normal');
     this.set(MISTAKE_COUNT, 0);
+    this.set(LAST_MISTAKE, null);
     this.set(ELAPSED_SECONDS, 0);
     this.set(VICTORY_SUMMARY, null);
     this.set(GAME_STATUS, 'playing');
@@ -260,6 +263,7 @@ export class GameTap extends MultiAtomValueTap implements Tap {
     this.set(SELECTED_CELL, null);
     this.set(SELECTED_DIGIT, null);
     this.set(MISTAKE_COUNT, 0);
+    this.set(LAST_MISTAKE, null);
     this.set(ELAPSED_SECONDS, 0);
     this.set(VICTORY_SUMMARY, null);
     this.set(GAME_STATUS, 'playing');
@@ -355,6 +359,7 @@ export class GameTap extends MultiAtomValueTap implements Tap {
     if (digit !== solution[index]) {
       const mistakes = (this.get(MISTAKE_COUNT) as number) + 1;
       this.set(MISTAKE_COUNT, mistakes);
+      this.set(LAST_MISTAKE, { index, digit, seq: mistakes });
       const limit = this.deps.mistakeLimit.get();
       if (limit != null && mistakes >= limit) {
         this.lose();

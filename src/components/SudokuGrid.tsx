@@ -7,6 +7,7 @@ import {
   GAME_NOTES,
   GAME_PUZZLE,
   GAME_SELECT_CELL,
+  LAST_MISTAKE,
   SELECTED_CELL,
 } from '../grips';
 
@@ -15,6 +16,7 @@ export default function SudokuGrid() {
   const board = useGrip(GAME_BOARD) as Board;
   const notes = useGrip(GAME_NOTES) as readonly (readonly number[])[];
   const selectedCell = useGrip(SELECTED_CELL);
+  const lastMistake = useGrip(LAST_MISTAKE);
   const conflictHighlightEnabled = useGrip(CONFLICT_HIGHLIGHT_ENABLED);
   const selectCell = useGrip(GAME_SELECT_CELL);
 
@@ -25,7 +27,7 @@ export default function SudokuGrid() {
   const focusedDigit = selectedCell != null ? board[selectedCell] : 0;
 
   return (
-    <div className="sudoku-grid">
+    <div className="sudoku-grid" role="grid" aria-label="Sudoku board">
       {board.map((value, index) => (
         <Cell
           key={index}
@@ -37,6 +39,7 @@ export default function SudokuGrid() {
           isCrosshair={crosshair.has(index)}
           isSameDigit={focusedDigit !== 0 && value === focusedDigit}
           isConflict={conflicts.has(index)}
+          mistakeSeq={lastMistake && lastMistake.index === index && lastMistake.digit === value ? lastMistake.seq : null}
           onSelect={(i) => selectCell?.(i)}
         />
       ))}

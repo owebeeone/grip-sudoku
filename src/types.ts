@@ -73,3 +73,4 @@ export interface VictorySummary {
 }
 
 export type ViewName = 'auth' | 'dashboard' | 'game' | 'profile';
+export type ThemeName = 'paper' | 'midnight';

@@ -23,6 +23,7 @@ import type {
   LeaderboardScope,
   ProfileStats,
   RunLogEntry,
+  ThemeName,
   User,
   VictorySummary,
   ViewName,
@@ -35,6 +36,10 @@ function tapGrip<T>(name: string) {
 // ---- view (standalone atom) --------------------------------------------------------------------
 export const CURRENT_VIEW = defineGrip<ViewName>('View.Current', 'auth');
 export const CURRENT_VIEW_TAP = tapGrip<ViewName>('View.Current');
+
+// ---- theme (ThemeTap-owned; it mirrors the value onto <html data-theme>) ---------------------------
+export const THEME = defineGrip<ThemeName>('View.Theme', 'paper');
+export const THEME_TAP = tapGrip<ThemeName>('View.Theme');
 
 // ---- auth: form fields are standalone atoms; session + submit are AuthTap-owned -----------------
 export const AUTH_MODE = defineGrip<'login' | 'register'>('Auth.Mode', 'login');
@@ -82,6 +87,8 @@ export const SELECTED_DIGIT = defineGrip<number | null>('Game.SelectedDigit', nu
 export const INPUT_MODE = defineGrip<InputMode>('Game.InputMode', 'normal');
 
 export const MISTAKE_COUNT = defineGrip<number>('Game.MistakeCount', 0);
+// `seq` increments per mistake so the same cell can shake twice in a row (it re-keys the animation).
+export const LAST_MISTAKE = defineGrip<{ index: number; digit: number; seq: number } | null>('Game.LastMistake', null);
 export const ELAPSED_SECONDS = defineGrip<number>('Game.ElapsedSeconds', 0);
 export const VICTORY_SUMMARY = defineGrip<VictorySummary | null>('Game.VictorySummary', null);
 

@@ -1,5 +1,5 @@
 import { useGrip, useGripSetter, useGripState, useTextGrip } from '@owebeeone/grip-react';
-import { DIFFICULTIES, type Difficulty } from '../engine/sudoku';
+import { DIFFICULTIES } from '../engine/sudoku';
 import {
   AUTH_BUSY,
   AUTH_ERROR,
@@ -15,13 +15,8 @@ import {
   AUTH_MODE_TAP,
   AUTH_SUBMIT,
 } from '../grips';
-
-const DIFFICULTY_LABEL: Record<Difficulty, string> = {
-  easy: 'Easy',
-  medium: 'Medium',
-  hard: 'Hard',
-  insane: 'Insane',
-};
+import { LogoMark } from '../components/icons';
+import { DIFFICULTY_LABEL } from '../format';
 
 export default function AuthView() {
   const mode = useGrip(AUTH_MODE);
@@ -44,12 +39,15 @@ export default function AuthView() {
           submit?.();
         }}
       >
-        <h1>Grip Sudoku</h1>
-        <p className="auth-subtitle">A Sudoku SPA where every pixel of state lives in a grip.</p>
+        <h1>
+          <LogoMark />
+          Grip Sudoku
+        </h1>
+        <p className="auth-subtitle">Printed clues, pencilled answers. Every bit of state lives in a grip.</p>
 
         <div className="auth-tabs">
           <button type="button" className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')}>
-            Sign In
+            Sign in
           </button>
           <button type="button" className={mode === 'register' ? 'active' : ''} onClick={() => setMode('register')}>
             Register
@@ -86,7 +84,7 @@ export default function AuthView() {
         {error && <p className="auth-error">{error}</p>}
 
         <button type="submit" className="primary" disabled={busy}>
-          {busy ? 'Please wait…' : mode === 'login' ? 'Sign In' : 'Create Account'}
+          {busy ? 'One moment…' : mode === 'login' ? 'Sign in' : 'Create account'}
         </button>
 
         <p className="auth-hint">

@@ -5,6 +5,8 @@ import SudokuGrid from '../components/SudokuGrid';
 import NumberPad from '../components/NumberPad';
 import Toolbar from '../components/Toolbar';
 import VictoryModal from '../components/VictoryModal';
+import ThemeToggle from '../components/ThemeToggle';
+import { DIFFICULTY_LABEL, formatTime } from '../format';
 import {
   ELAPSED_SECONDS,
   GAME_DIFFICULTY,
@@ -15,12 +17,6 @@ import {
   MISTAKE_COUNT,
   MISTAKE_LIMIT,
 } from '../grips';
-
-function formatTime(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
 
 export default function GameView() {
   const status = useGrip(GAME_STATUS) as GameStatus;
@@ -34,18 +30,31 @@ export default function GameView() {
 
   if (!difficulty) return null;
 
+  const nearLimit = mistakeLimit != null && mistakes >= mistakeLimit - 1;
+  const paused = status === 'paused';
+
   return (
     <div className="page game-page">
       <header className="game-status-bar">
-        <span className={`difficulty-tag tag-${difficulty}`}>{difficulty}</span>
-        <span className="game-timer">{formatTime(elapsed)}</span>
-        <span className="mistake-counter">
-          Mistakes: {mistakes}
-          {mistakeLimit != null ? ` / ${mistakeLimit}` : ''}
+        <span className={`difficulty-tag tag-${difficulty}`}>{DIFFICULTY_LABEL[difficulty]}</span>
+        <span className={`game-timer${paused ? ' paused' : ''}`} aria-live="off">
+          {formatTime(elapsed)}
+        </span>
+        <span className={`mistake-counter${nearLimit ? ' warn' : ''}`}>
+          Mistakes
+          {mistakeLimit != null ? (
+            <span className="pips" aria-label={`${mistakes} of ${mistakeLimit}`}>
+              {Array.from({ length: mistakeLimit }, (_, i) => (
+                <span key={i} className={`pip${i < mistakes ? ' hit' : ''}`} />
+              ))}
+            </span>
+          ) : (
+            <span> {mistakes}</span>
+          )}
         </span>
         <div className="game-status-actions">
           <button type="button" onClick={() => pauseToggle?.()}>
-            {status === 'paused' ? 'Resume' : 'Pause'}
+            {paused ? 'Resume' : 'Pause'}
           </button>
           <button type="button" onClick={() => restart?.()}>
             Restart
@@ -53,10 +62,11 @@ export default function GameView() {
           <button type="button" onClick={() => exitToDashboard?.()}>
             Exit
           </button>
+          <ThemeToggle />
         </div>
       </header>
 
-      <div className="game-body">
+      <div className={`game-body${paused ? ' blurred' : ''}`}>
         <SudokuGrid />
         <div className="game-side-panel">
           <Toolbar />
@@ -64,10 +74,11 @@ export default function GameView() {
         </div>
       </div>
 
-      {status === 'paused' && (
+      {paused && (
         <div className="modal-overlay">
           <div className="modal">
             <h2>Paused</h2>
+            <p className="muted">The board is hidden while you're away.</p>
             <button type="button" className="primary" onClick={() => pauseToggle?.()}>
               Resume
             </button>
@@ -78,14 +89,14 @@ export default function GameView() {
       {status === 'lost' && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Out of Mistakes</h2>
+            <h2>Out of mistakes</h2>
             <p className="muted">You hit the mistake limit for this run.</p>
             <div className="victory-actions">
               <button type="button" className="primary" onClick={() => restart?.()}>
-                Try Again
+                Try again
               </button>
               <button type="button" onClick={() => exitToDashboard?.()}>
-                Return to Dashboard
+                Back to dashboard
               </button>
             </div>
           </div>

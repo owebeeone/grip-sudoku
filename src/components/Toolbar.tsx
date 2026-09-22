@@ -9,6 +9,7 @@ import {
   INPUT_MODE,
   SELECTED_CELL,
 } from '../grips';
+import { EraserIcon, PenIcon, PencilIcon, RedoIcon, UndoIcon } from './icons';
 
 export default function Toolbar() {
   const inputMode = useGrip(INPUT_MODE) as InputMode;
@@ -21,25 +22,39 @@ export default function Toolbar() {
 
   return (
     <div className="toolbar">
-      <div className="mode-toggle">
-        <button type="button" className={inputMode === 'normal' ? 'active' : ''} onClick={() => setInputMode?.('normal')}>
-          Normal
+      <div className="mode-toggle" role="group" aria-label="Input mode">
+        <button
+          type="button"
+          className={inputMode === 'normal' ? 'active' : ''}
+          aria-pressed={inputMode === 'normal'}
+          onClick={() => setInputMode?.('normal')}
+        >
+          <PenIcon /> Pen
         </button>
-        <button type="button" className={inputMode === 'notes' ? 'active' : ''} onClick={() => setInputMode?.('notes')}>
-          Pencil Notes
+        <button
+          type="button"
+          className={inputMode === 'notes' ? 'active' : ''}
+          aria-pressed={inputMode === 'notes'}
+          onClick={() => setInputMode?.('notes')}
+        >
+          <PencilIcon /> Pencil
         </button>
       </div>
       <div className="toolbar-actions">
         <button type="button" disabled={!history || history.past.length === 0} onClick={() => undo?.()}>
-          Undo
+          <UndoIcon /> Undo
         </button>
         <button type="button" disabled={!history || history.future.length === 0} onClick={() => redo?.()}>
-          Redo
+          <RedoIcon /> Redo
         </button>
         <button type="button" disabled={selectedCell == null} onClick={() => selectedCell != null && clearCell?.(selectedCell)}>
-          Erase
+          <EraserIcon /> Erase
         </button>
       </div>
+      <p className="shortcut-hint">
+        <kbd>1</kbd>–<kbd>9</kbd> enter · <kbd>Space</kbd> pen/pencil · <kbd>←↑↓→</kbd> move · <kbd>⌫</kbd> erase ·{' '}
+        <kbd>⌘Z</kbd> undo
+      </p>
     </div>
   );
 }

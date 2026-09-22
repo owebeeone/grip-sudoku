@@ -3,6 +3,9 @@ import { DIFFICULTIES, type Difficulty } from '../engine/sudoku';
 import DifficultyCard from '../components/DifficultyCard';
 import StatsSummary from '../components/StatsSummary';
 import LeaderboardWidget from '../components/LeaderboardWidget';
+import ThemeToggle from '../components/ThemeToggle';
+import { LogoMark } from '../components/icons';
+import { DIFFICULTY_LABEL, formatTime } from '../format';
 import {
   AUTH_SIGN_OUT,
   CURRENT_USER,
@@ -19,12 +22,6 @@ import {
   SELECT_LEADERBOARD_SCOPE,
 } from '../grips';
 import type { AsyncState, LeaderboardEntry, LeaderboardScope, ProfileStats } from '../types';
-
-function formatTime(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
 
 export default function DashboardView() {
   const user = useGrip(CURRENT_USER);
@@ -48,15 +45,19 @@ export default function DashboardView() {
   return (
     <div className="page">
       <header className="app-header">
-        <h1>Grip Sudoku</h1>
+        <h1>
+          <LogoMark />
+          Grip Sudoku
+        </h1>
         <div className="header-actions">
           <span className="muted">{user?.displayName}</span>
           <button type="button" onClick={() => setView('profile')}>
             Profile
           </button>
           <button type="button" onClick={() => signOut?.()}>
-            Sign Out
+            Sign out
           </button>
+          <ThemeToggle />
         </div>
       </header>
 
@@ -64,16 +65,16 @@ export default function DashboardView() {
         <section className="panel resume-banner">
           <div>
             <strong>Game in progress</strong>
-            <span className="muted"> — {gameDifficulty} {gameStatus === 'paused' ? '(paused)' : ''}</span>
+            <span className="muted"> — {DIFFICULTY_LABEL[gameDifficulty]}{gameStatus === 'paused' ? ', paused' : ''}</span>
           </div>
           <button type="button" className="primary" onClick={() => resumeGame?.()}>
-            Resume Game
+            Resume game
           </button>
         </section>
       )}
 
       <section className="panel">
-        <h2>Quick Play</h2>
+        <h2>Quick play</h2>
         <div className="difficulty-grid">
           {DIFFICULTIES.map((d) => (
             <DifficultyCard
@@ -97,7 +98,7 @@ export default function DashboardView() {
 
       {stats.status === 'ready' && (
         <p className="muted small">
-          Your best {selectedDifficulty} time is {formatTime(bestTimeFor(selectedDifficulty) ?? 0)}.
+          Your best {DIFFICULTY_LABEL[selectedDifficulty].toLowerCase()} time is {formatTime(bestTimeFor(selectedDifficulty) ?? 0)}.
         </p>
       )}
     </div>
